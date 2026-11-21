@@ -4,49 +4,69 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Cuentas claras</title>
+<meta name="theme-color" content="#064e3b">
+<script>
+  try { const a = JSON.parse(localStorage.getItem('cuentas-claras-ajustes')) || {};
+    if (a.tema && a.tema !== 'auto') document.documentElement.dataset.tema = a.tema;
+    if (a.letra && a.letra !== 'normal') document.documentElement.dataset.letra = a.letra; } catch(e) {}
+</script>
 <style>
   :root{
-    --bg:#f5f3ee; --card:#fff; --ink:#1b1d1a; --muted:#555a52; --line:#dcd8cd;
-    --accent:#17704f; --accent-ink:#fff; --soft:#e3f1ea; --warn:#a63d1c; --warn-soft:#fbe9e2;
+    --bg:#f2f4f7; --card:#fff; --ink:#0f172a; --muted:#5b6474; --line:#e1e5ec;
+    --accent:#0a8f63; --accent-ink:#fff; --soft:#e6f6ef; --warn:#c2410c; --warn-soft:#fdeee6;
+    --hero1:#064e3b; --hero2:#0f766e; --hero-ink:#ecfdf5; --money:#0a8f63; --sombra:0 1px 2px rgba(15,23,42,.06),0 4px 14px rgba(15,23,42,.05);
+    --base:15px; color-scheme:light;
+  }
+  :root[data-tema=oscuro]{
+    --bg:#0b1120; --card:#141c2f; --ink:#e8edf6; --muted:#9aa5b8; --line:#253149;
+    --accent:#34d399; --accent-ink:#04241a; --soft:#11362b; --warn:#fb923c; --warn-soft:#3b2414;
+    --hero1:#065f46; --hero2:#0e7490; --hero-ink:#ecfdf5; --money:#34d399; --sombra:none; color-scheme:dark;
   }
   @media (prefers-color-scheme: dark){
-    :root{ --bg:#121411; --card:#1c1f1b; --ink:#f0efea; --muted:#b4b8ae; --line:#363a33;
-      --accent:#56c595; --accent-ink:#0d1a13; --soft:#1d3127; --warn:#f0946a; --warn-soft:#3a2219; }
+    :root:not([data-tema]){
+      --bg:#0b1120; --card:#141c2f; --ink:#e8edf6; --muted:#9aa5b8; --line:#253149;
+      --accent:#34d399; --accent-ink:#04241a; --soft:#11362b; --warn:#fb923c; --warn-soft:#3b2414;
+      --hero1:#065f46; --hero2:#0e7490; --hero-ink:#ecfdf5; --money:#34d399; --sombra:none; color-scheme:dark;
+    }
   }
+  :root[data-letra=chica]{--base:13.5px}
+  :root[data-letra=grande]{--base:17px}
+  html{font-size:var(--base)}
   *{box-sizing:border-box}
-  html,body{margin:0;background:var(--bg);color:var(--ink);
-    font:18px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;-webkit-text-size-adjust:100%}
+  html,body{margin:0;background:var(--bg);color:var(--ink)}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:1.12rem/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;-webkit-text-size-adjust:100%}
   main{max-width:560px;margin:0 auto;padding:8px 16px 170px}
-  h1{font-size:28px;line-height:1.2;margin:18px 0 6px}
-  h2{font-size:24px;line-height:1.25;margin:18px 0 6px}
-  h3{font-size:19px;margin:22px 0 8px}
+  h1{font-size:1.75rem;line-height:1.2;margin:18px 0 6px}
+  h2{font-size:1.5rem;line-height:1.25;margin:18px 0 6px}
+  h3{font-size:1.19rem;margin:22px 0 8px}
   p{margin:0 0 12px}
-  .ayuda{color:var(--muted);font-size:17px}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0}
+  .ayuda{color:var(--muted);font-size:1.06rem}
+  .card{background:var(--card);border:1px solid var(--line);box-shadow:var(--sombra);border-radius:16px;padding:16px;margin:12px 0}
 
   /* botones */
   button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
-  .btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:56px;padding:12px 16px;
-    border-radius:14px;border:2px solid var(--line);background:var(--card);font-weight:600;font-size:18px;text-align:center}
+  .btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:3.5rem;padding:12px 16px;
+    border-radius:14px;border:2px solid var(--line);background:var(--card);font-weight:600;font-size:1.12rem;text-align:center}
   .btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
   .btn.primary:disabled{opacity:.4;cursor:not-allowed}
   .btn.agregar{border-style:dashed;border-color:var(--accent);color:var(--accent);background:transparent}
   .btn.peligro{border-color:transparent;background:transparent;color:var(--warn);text-decoration:underline}
   .btn + .btn{margin-top:10px}
-  .link{background:none;border:0;padding:10px 0;color:var(--accent);font-weight:600;text-decoration:underline;font-size:17px}
+  .link{background:none;border:0;padding:10px 0;color:var(--accent);font-weight:600;text-decoration:underline;font-size:1.06rem}
 
   /* campos */
-  label.campo{display:block;font-weight:700;font-size:19px;margin:20px 0 6px}
-  label.campo small{font-weight:400;color:var(--muted);font-size:16px}
-  input[type=text],input:not([type]){font:inherit;font-size:20px;color:var(--ink);background:var(--card);
-    border:2px solid var(--line);border-radius:12px;padding:12px 14px;width:100%;min-height:56px}
+  label.campo{display:block;font-weight:700;font-size:1.19rem;margin:20px 0 6px}
+  label.campo small{font-weight:400;color:var(--muted);font-size:1rem}
+  input[type=text],input:not([type]){font:inherit;font-size:1.25rem;color:var(--ink);background:var(--card);
+    border:2px solid var(--line);border-radius:12px;padding:12px 14px;width:100%;min-height:3.5rem}
   input:focus{outline:none;border-color:var(--accent)}
   .monto{position:relative}
-  .monto span{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:22px;color:var(--muted)}
-  .monto input{padding-left:34px;font-size:24px;font-weight:600}
-  .error{color:var(--warn);font-weight:600;font-size:16px;margin:6px 0 0}
+  .monto span{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:1.38rem;color:var(--muted)}
+  .monto input{padding-left:34px;font-size:1.5rem;font-weight:600}
+  .error{color:var(--warn);font-weight:600;font-size:1rem;margin:6px 0 0}
   .error:empty{display:none}
-  .eco{color:var(--muted);font-size:16px;margin:6px 0 0}
+  .eco{color:var(--muted);font-size:1rem;margin:6px 0 0}
   .eco:empty{display:none}
   .fila-agregar{display:flex;gap:10px}
   .fila-agregar .btn{width:auto;flex:none}
@@ -54,9 +74,9 @@
   /* opciones (radio/checkbox grandes) */
   .opciones{display:grid;gap:8px}
   .opciones.dos{grid-template-columns:1fr 1fr}
-  .opcion{display:flex;align-items:center;gap:12px;min-height:56px;padding:10px 14px;border:2px solid var(--line);
-    border-radius:12px;background:var(--card);text-align:left;font-size:18px}
-  .opcion .marca{width:26px;height:26px;flex:none;border:2px solid var(--muted);border-radius:50%;display:grid;place-items:center;font-size:16px;font-weight:700}
+  .opcion{display:flex;align-items:center;gap:12px;min-height:3.5rem;padding:10px 14px;border:2px solid var(--line);
+    border-radius:12px;background:var(--card);text-align:left;font-size:1.12rem}
+  .opcion .marca{width:1.62rem;height:1.62rem;flex:none;border:2px solid var(--muted);border-radius:50%;display:grid;place-items:center;font-size:1rem;font-weight:700}
   .opcion.cuadro .marca{border-radius:7px}
   .opcion[aria-checked=true]{border-color:var(--accent);background:var(--soft);font-weight:700}
   .opcion[aria-checked=true] .marca{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
@@ -65,50 +85,50 @@
   /* listas */
   .lista{list-style:none;margin:0;padding:0}
   .lista li + li{margin-top:8px}
-  .fila{display:flex;align-items:center;gap:12px;width:100%;min-height:64px;padding:12px 14px;background:var(--card);
+  .fila{box-shadow:var(--sombra);display:flex;align-items:center;gap:12px;width:100%;min-height:4rem;padding:12px 14px;background:var(--card);
     border:1px solid var(--line);border-radius:14px;text-align:left}
   .grow{flex:1;min-width:0}
-  .nombre{display:block;font-weight:700;font-size:19px}
-  .sub{display:block;color:var(--muted);font-size:16px}
-  .cambiar{color:var(--accent);font-weight:600;font-size:16px;text-decoration:underline;flex:none}
+  .nombre{display:block;font-weight:700;font-size:1.19rem}
+  .sub{display:block;color:var(--muted);font-size:1rem}
+  .cambiar{color:var(--accent);font-weight:600;font-size:1rem;text-decoration:underline;flex:none}
   .plata{font-variant-numeric:tabular-nums;font-weight:700;white-space:nowrap}
   .vacio{color:var(--muted);padding:18px;text-align:center;border:2px dashed var(--line);border-radius:14px;margin:12px 0}
-  .total{display:flex;justify-content:space-between;font-size:19px;padding:14px 4px 0;border-top:2px solid var(--line);margin-top:14px}
+  .total{display:flex;justify-content:space-between;font-size:1.19rem;padding:14px 4px 0;border-top:2px solid var(--line);margin-top:14px}
 
   /* encabezado y pasos */
   .top{background:var(--bg);border-bottom:1px solid var(--line)}
   .top .in{max-width:560px;margin:0 auto;padding:6px 16px 10px}
   .top .titulo{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
-  .top .titulo b{font-size:20px}
+  .top .titulo b{font-size:1.25rem}
   .pasos{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:6px}
-  .pasos button{border:2px solid var(--line);background:var(--card);border-radius:12px;padding:8px 4px;font-size:15px;line-height:1.2}
-  .pasos button b{display:block;font-size:13px;color:var(--muted);font-weight:600}
+  .pasos button{border:2px solid var(--line);background:var(--card);border-radius:12px;padding:8px 4px;font-size:0.938rem;line-height:1.2}
+  .pasos button b{display:block;font-size:0.812rem;color:var(--muted);font-weight:600}
   .pasos button[aria-current=step]{border-color:var(--accent);background:var(--soft);font-weight:700}
   .pasos button[aria-current=step] b{color:var(--accent)}
 
   /* resultado */
-  .pago{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:16px;margin:12px 0}
-  .pago .frase{font-size:20px;line-height:1.35;margin:0 0 12px}
-  .pago .frase .plata{font-size:24px;color:var(--accent)}
+  .pago{background:var(--card);border:1px solid var(--line);box-shadow:var(--sombra);border-radius:16px;padding:16px;margin:12px 0}
+  .pago .frase{font-size:1.25rem;line-height:1.35;margin:0 0 12px}
+  .pago .frase .plata{font-size:1.5rem;color:var(--money)}
   .pago.hecho{opacity:.6}
   .pago.hecho .frase{text-decoration:line-through}
-  .pago .btn{min-height:50px;font-size:17px}
-  .detalle li{padding:12px 0;border-top:1px solid var(--line);font-size:17px}
+  .pago .btn{min-height:3.12rem;font-size:1.06rem}
+  .detalle li{padding:12px 0;border-top:1px solid var(--line);font-size:1.06rem}
   .detalle li:first-child{border-top:0}
   .verde{color:var(--accent);font-weight:700} .rojo{color:var(--warn);font-weight:700}
-  details.card summary{font-weight:700;cursor:pointer;min-height:32px}
+  details.card summary{font-weight:700;cursor:pointer;min-height:2rem}
 
   /* inicio */
   .como{counter-reset:p;list-style:none;padding:0;margin:14px 0 20px}
   .como li{counter-increment:p;display:flex;gap:12px;align-items:flex-start;margin:10px 0}
-  .como li::before{content:counter(p);flex:none;width:32px;height:32px;border-radius:50%;background:var(--soft);color:var(--accent);
+  .como li::before{content:counter(p);flex:none;width:2rem;height:2rem;border-radius:50%;background:var(--soft);color:var(--accent);
     font-weight:800;display:grid;place-items:center}
 
   /* barra inferior */
   .bar{position:fixed;left:0;right:0;bottom:0;z-index:5;padding:10px 16px calc(12px + env(safe-area-inset-bottom));
     background:var(--card);border-top:1px solid var(--line);box-shadow:0 -4px 16px rgba(0,0,0,.06)}
   .bar .in{max-width:560px;margin:0 auto}
-  .bar .nota{text-align:center;color:var(--muted);font-size:16px;margin:0 0 8px}
+  .bar .nota{text-align:center;color:var(--muted);font-size:1rem;margin:0 0 8px}
   .bar:empty{display:none}
 
   /* hojas (dialog) */
@@ -117,24 +137,37 @@
   dialog.hoja::backdrop{background:rgba(0,0,0,.5)}
   .hoja .cab{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;gap:10px;
     padding:14px 18px;background:var(--bg);border-bottom:1px solid var(--line);z-index:1}
-  .hoja .cab h2{margin:0;font-size:22px}
+  .hoja .cab h2{margin:0;font-size:1.38rem}
   .hoja .cuerpo{padding:0 18px 18px}
   .hoja .pie{position:sticky;bottom:0;padding:12px 18px calc(14px + env(safe-area-inset-bottom));background:var(--bg);border-top:1px solid var(--line)}
 
   /* aviso con deshacer */
   .toast{position:fixed;left:50%;bottom:150px;transform:translateX(-50%);z-index:20;display:flex;align-items:center;gap:14px;
-    background:var(--ink);color:var(--bg);padding:12px 16px;border-radius:14px;font-size:17px;max-width:calc(100% - 32px);
+    background:var(--ink);color:var(--bg);padding:12px 16px;border-radius:14px;font-size:1.06rem;max-width:calc(100% - 32px);
     opacity:0;pointer-events:none;transition:opacity .2s}
   .toast.show{opacity:1;pointer-events:auto}
   .toast button{background:none;border:0;color:inherit;font-weight:800;text-decoration:underline;padding:6px 0}
   [hidden]{display:none!important}
+  /* tarjeta tipo billetera */
+  .saldo{background:linear-gradient(135deg,var(--hero1),var(--hero2));color:var(--hero-ink);border-radius:20px;padding:18px 20px;margin:14px 0;
+    position:relative;overflow:hidden}
+  .saldo::after{content:"";position:absolute;right:-40px;top:-40px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.08)}
+  .saldo .et{font-size:.95rem;opacity:.85}
+  .saldo .num{font-size:2.2rem;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.15}
+  .saldo .pie-s{font-size:.95rem;opacity:.85;margin-top:4px}
+  .marca-app{display:flex;align-items:center;gap:10px}
+  .marca-app .logo{width:2.4rem;height:2.4rem;border-radius:12px;background:linear-gradient(135deg,var(--hero1),var(--hero2));color:#fff;
+    display:grid;place-items:center;font-weight:800;font-size:1.2rem}
+  .barra-sup{display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .ajustes-btn{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:.95rem;font-weight:600;color:var(--ink)}
+  .muestra{display:block;font-weight:800}
 </style>
 </head>
 <body>
 
 <header class="top" id="top" hidden><div class="in">
-  <button class="link" id="btnVolver">‹ Volver a mis cuentas</button>
-  <div class="titulo"><b id="titulo"></b><button class="link" id="btnRenombrar" style="font-size:15px;flex:none">Cambiar nombre</button></div>
+  <div class="barra-sup"><button class="link" id="btnVolver">‹ Mis cuentas</button><button class="ajustes-btn" data-ajustes>Aa · Ajustes</button></div>
+  <div class="titulo"><b id="titulo"></b><button class="link" id="btnRenombrar" style="font-size:0.938rem;flex:none">Cambiar nombre</button></div>
   <nav class="pasos" aria-label="Pasos">
     <button data-paso="1"><b>Paso 1</b>Quiénes</button>
     <button data-paso="2"><b>Paso 2</b>Gastos</button>
@@ -145,7 +178,7 @@
 <main>
   <!-- INICIO -->
   <section id="vInicio" hidden>
-    <h1>Cuentas claras</h1>
+    <div class="barra-sup" style="margin-top:14px"><div class="marca-app"><span class="logo">$</span><h1 style="margin:0">Cuentas claras</h1></div><button class="ajustes-btn" data-ajustes>Aa · Ajustes</button></div>
     <p class="ayuda">Para dividir los gastos de una juntada sin hacer cuentas a mano.</p>
     <ol class="como">
       <li>Anotás quiénes estuvieron.</li>
@@ -205,11 +238,11 @@
     <p class="eco" id="ecoMonto"></p>
     <p class="error" id="errMonto"></p>
 
-    <div class="campo" style="font-weight:700;font-size:19px;margin:20px 0 6px">¿Quién lo pagó?</div>
+    <div class="campo" style="font-weight:700;font-size:1.19rem;margin:20px 0 6px">¿Quién lo pagó?</div>
     <div class="opciones dos" id="gPago" role="radiogroup" aria-label="Quién lo pagó"></div>
     <p class="error" id="errPago"></p>
 
-    <div class="campo" style="font-weight:700;font-size:19px;margin:20px 0 6px">¿Para quiénes era?</div>
+    <div class="campo" style="font-weight:700;font-size:1.19rem;margin:20px 0 6px">¿Para quiénes era?</div>
     <div class="opciones" role="radiogroup" aria-label="Para quiénes era">
       <button type="button" class="opcion" role="radio" data-modo="todos"><span class="marca"></span>Para todos</button>
       <button type="button" class="opcion" role="radio" data-modo="algunos"><span class="marca"></span>Solo para algunos</button>
@@ -231,14 +264,14 @@
     <label class="campo" for="dpNombre">Nombre</label>
     <input id="dpNombre" autocomplete="off">
 
-    <div class="campo" style="font-weight:700;font-size:19px;margin:20px 0 6px">¿Cuánto paga?</div>
+    <div class="campo" style="font-weight:700;font-size:1.19rem;margin:20px 0 6px">¿Cuánto paga?</div>
     <div class="opciones" id="dpPartes" role="radiogroup" aria-label="Cuánto paga">
       <button type="button" class="opcion" role="radio" data-partes="1"><span class="marca"></span>Paga completo</button>
       <button type="button" class="opcion" role="radio" data-partes="0.5"><span class="marca"></span>Paga la mitad <small style="color:var(--muted);font-weight:400">(ej: un chico)</small></button>
       <button type="button" class="opcion" role="radio" data-partes="0"><span class="marca"></span>No paga nada <small style="color:var(--muted);font-weight:400">(ej: un bebé)</small></button>
     </div>
 
-    <div class="campo" style="font-weight:700;font-size:19px;margin:20px 0 6px">¿Paga junto con alguien?</div>
+    <div class="campo" style="font-weight:700;font-size:1.19rem;margin:20px 0 6px">¿Paga junto con alguien?</div>
     <p class="ayuda" style="margin-bottom:8px">Si son pareja o familia, les sale una sola transferencia entre los dos.</p>
     <div class="opciones" id="dpJunto" role="radiogroup" aria-label="Paga junto con"></div>
 
@@ -249,6 +282,25 @@
     <div style="margin-top:12px"><button class="btn peligro" id="btnBorrarPersona"></button></div>
   </div>
   <div class="pie"><button class="btn primary" id="btnGuardarPersona">Guardar</button></div>
+</dialog>
+
+<!-- Hoja: ajustes -->
+<dialog class="hoja" id="dlgAjustes">
+  <div class="cab"><h2>Ajustes</h2><button class="link" data-cerrar>Listo</button></div>
+  <div class="cuerpo">
+    <div class="campo" style="font-weight:700;font-size:1.19rem;margin:20px 0 6px">Tamaño de letra</div>
+    <div class="opciones" style="grid-template-columns:repeat(3,1fr)" id="ajLetra" role="radiogroup" aria-label="Tamaño de letra">
+      <button type="button" class="opcion" role="radio" data-letra="chica" style="flex-direction:column;justify-content:center;gap:2px"><span class="muestra" style="font-size:15px">Aa</span>Chica</button>
+      <button type="button" class="opcion" role="radio" data-letra="normal" style="flex-direction:column;justify-content:center;gap:2px"><span class="muestra" style="font-size:19px">Aa</span>Normal</button>
+      <button type="button" class="opcion" role="radio" data-letra="grande" style="flex-direction:column;justify-content:center;gap:2px"><span class="muestra" style="font-size:24px">Aa</span>Grande</button>
+    </div>
+    <div class="campo" style="font-weight:700;font-size:1.19rem;margin:24px 0 6px">Colores</div>
+    <div class="opciones" id="ajTema" role="radiogroup" aria-label="Colores">
+      <button type="button" class="opcion" role="radio" data-tema="claro"><span class="marca"></span>☀️ Claro</button>
+      <button type="button" class="opcion" role="radio" data-tema="oscuro"><span class="marca"></span>🌙 Oscuro</button>
+      <button type="button" class="opcion" role="radio" data-tema="auto"><span class="marca"></span>📱 Como el celular</button>
+    </div>
+  </div>
 </dialog>
 
 <!-- Hoja: nombre de la cuenta -->
@@ -427,7 +479,7 @@ function renderInicio(){
       <span class="grow"><span class="nombre">${esc(c.titulo || 'Sin nombre')}</span>
       <span class="sub">${c.personas.length} personas · ${c.gastos.length ? c.gastos.length + ' gastos · ' + fmt(total) : 'sin gastos todavía'}</span></span>
       <span class="cambiar">Abrir</span></button>
-      <button class="link" data-borrar style="font-size:15px;color:var(--warn);padding:6px 4px">Borrar esta cuenta</button></li>`; }).join('')}</ul>` : '';
+      <button class="link" data-borrar style="font-size:0.938rem;color:var(--warn);padding:6px 4px">Borrar esta cuenta</button></li>`; }).join('')}</ul>` : '';
 }
 $('#anteriores').addEventListener('click', e => {
   const li = e.target.closest('li[data-id]'); if (!li) return;
@@ -545,7 +597,8 @@ function render2(){
       <span class="sub">Lo pagó ${esc(quien)} · ${esc(para)}</span></span>
       <span style="text-align:right"><span class="plata" style="display:block">${fmt(g.monto)}</span><span class="cambiar">Cambiar</span></span></button></li>`;
   }).join('') : '<li class="vacio">Todavía no anotaste ningún gasto.</li>';
-  $('#totalGastos').innerHTML = C.gastos.length ? `<div class="total"><span>Total gastado</span><span class="plata">${fmt(total)}</span></div>` : '';
+  $('#totalGastos').innerHTML = C.gastos.length ? `<div class="saldo"><div class="et">Total gastado</div><div class="num">${fmt(total)}</div>
+    <div class="pie-s">${C.gastos.length} ${C.gastos.length === 1 ? 'gasto' : 'gastos'} · ${C.personas.length} personas</div></div>` : '';
 }
 
 let gEdit = null;
@@ -614,7 +667,8 @@ function render3(){
   if (!C.gastos.length) { el.innerHTML = `<div class="vacio">Primero anotá los gastos en el paso 2.</div>`; return; }
   const r = calcular();
   const total = C.gastos.reduce((s,g) => s + g.monto, 0);
-  let h = `<p class="ayuda">Gastaron en total <b>${fmt(total)}</b>.</p>`;
+  let h = `<div class="saldo"><div class="et">Gastaron en total</div><div class="num">${fmt(total)}</div>
+    <div class="pie-s">${C.gastos.length} ${C.gastos.length === 1 ? 'gasto' : 'gastos'} · ${C.personas.length} personas</div></div>`;
   if (!r.tr.length) h += `<div class="pago"><p class="frase">✅ Nadie le debe nada a nadie. Están todos a mano.</p></div>`;
   else {
     h += `<p class="ayuda">${r.tr.length === 1 ? 'Hace falta 1 sola transferencia' : `Hacen falta ${r.tr.length} transferencias`}:</p>`;
@@ -637,7 +691,7 @@ function render3(){
   }).join('')}</ul>${C.personas.some(p => p.hogar) ? '<p class="ayuda" style="margin-top:8px">Los que pagan juntos se suman en una sola transferencia.</p>' : ''}</details>`;
   h += `<div style="margin-top:6px"><button class="btn" id="btnCopiarTexto">Copiar el resumen</button>
     <button class="btn" id="btnLink">Pasar esta cuenta a otro teléfono</button>
-    <p class="ayuda" style="margin-top:8px;font-size:15px">“Pasar a otro teléfono” manda un link para que otra persona abra esta misma cuenta y la pueda seguir completando.</p></div>`;
+    <p class="ayuda" style="margin-top:8px;font-size:0.938rem">“Pasar a otro teléfono” manda un link para que otra persona abra esta misma cuenta y la pueda seguir completando.</p></div>`;
   el.innerHTML = h;
 }
 $('#resultado').addEventListener('click', async e => {
@@ -676,6 +730,23 @@ async function compartirLink(){
 /* ---------- nombre de la cuenta ---------- */
 $('#btnRenombrar').addEventListener('click', () => { $('#dnNombre').value = C.titulo || ''; $('#dlgNombre').showModal(); });
 $('#btnGuardarNombre').addEventListener('click', () => { C.titulo = $('#dnNombre').value.trim() || C.titulo; guardar(); $('#dlgNombre').close(); render(); });
+
+/* ---------- ajustes ---------- */
+const AJ_KEY = 'cuentas-claras-ajustes';
+let aj = (() => { try { return JSON.parse(localStorage.getItem(AJ_KEY)) || {}; } catch(e) { return {}; } })();
+aj.tema = aj.tema || 'auto'; aj.letra = aj.letra || 'normal';
+function aplicarAjustes(){
+  const r = document.documentElement;
+  if (aj.tema === 'auto') delete r.dataset.tema; else r.dataset.tema = aj.tema;
+  if (aj.letra === 'normal') delete r.dataset.letra; else r.dataset.letra = aj.letra;
+  try { localStorage.setItem(AJ_KEY, JSON.stringify(aj)); } catch(e) {}
+  document.querySelectorAll('#ajLetra [data-letra]').forEach(b => b.setAttribute('aria-checked', b.dataset.letra === aj.letra));
+  document.querySelectorAll('#ajTema [data-tema]').forEach(b => b.setAttribute('aria-checked', b.dataset.tema === aj.tema));
+}
+document.addEventListener('click', e => { if (e.target.closest('[data-ajustes]')) { aplicarAjustes(); $('#dlgAjustes').showModal(); } });
+$('#ajLetra').addEventListener('click', e => { const b = e.target.closest('[data-letra]'); if (b) { aj.letra = b.dataset.letra; aplicarAjustes(); } });
+$('#ajTema').addEventListener('click', e => { const b = e.target.closest('[data-tema]'); if (b) { aj.tema = b.dataset.tema; aplicarAjustes(); } });
+aplicarAjustes();
 
 /* ---------- cerrar hojas ---------- */
 document.querySelectorAll('dialog').forEach(d => {
